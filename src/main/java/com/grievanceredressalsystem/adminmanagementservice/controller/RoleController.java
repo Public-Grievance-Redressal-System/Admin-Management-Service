@@ -1,58 +1,58 @@
 package com.grievanceredressalsystem.adminmanagementservice.controller;
 
 import com.grievanceredressalsystem.adminmanagementservice.model.Role;
-import jakarta.websocket.server.PathParam;
+import com.grievanceredressalsystem.adminmanagementservice.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/role")
 public class RoleController {
 
-    private static final Map<UUID, Role> roleTable = new HashMap<>();
+    @Autowired
+    RoleService roleService;
 
     @GetMapping
     public List<Role> getRole() {
 
-        return roleTable.keySet().stream().map(roleTable::get).toList();
-//        return "Inside get Role method!";
+        return roleService.getAllRoles();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Role> getRoleById(@PathVariable("id") UUID id) {
+
+        return roleService.getRoleById(id);
     }
 
     @PostMapping
     public Role createRole(@RequestBody Role role) {
-        role.setId(UUID.randomUUID());
-        roleTable.put(role.getId(), role);
+        roleService.saveOrUpdate(role);
         return role;
-//        return "Inside create Role method!";
     }
 
     @PutMapping
-    public String updateRole(@RequestBody Role role) {
-        if(roleTable.containsKey(role.getId())) {
-            roleTable.put(role.getId(), role);
-            return "Role updated successfully!";
-        }
-        return "Role not found!";
+    public Role updateRole(@RequestBody Role role) {
+        roleService.updateRole(role);
+        return role;
     }
 
-    @DeleteMapping
-    public String deleteRole(@PathParam("id") UUID roleId) {
-        if(roleTable.containsKey(roleId))
-            if(roleTable.remove(roleId, roleTable.get(roleId))) {
-                return "Role successfully deleted!";
-            } else {
-                return "Failed to delete Role!";
-            }
+    @DeleteMapping("/{id}")
+    public String deleteRole(@PathVariable("id") UUID roleId) {
+        if(roleService.getRoleById(roleId).isPresent()) {
+            roleService.delete(roleId);
+            return "Successfully deleted!";
+        }
         return "Role not found!";
     }
 }

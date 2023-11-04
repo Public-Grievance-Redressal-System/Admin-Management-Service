@@ -1,70 +1,57 @@
 package com.grievanceredressalsystem.adminmanagementservice.controller;
 
 import com.grievanceredressalsystem.adminmanagementservice.model.User;
-import jakarta.websocket.server.PathParam;
-import org.springframework.util.CollectionUtils;
+import com.grievanceredressalsystem.adminmanagementservice.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
-    private static final Map<UUID, User> userTable = new HashMap<>();
+    @Autowired
+    UserService userService;
 
     @GetMapping
     public List<User> getUser() {
 
-        return userTable.keySet().stream().map(userTable::get).toList();
-//        return "Inside get user method!";
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<User> getUserById(@PathVariable("id") UUID id) {
+
+        return userService.getUserById(id);
     }
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        /*if(userList!= null && userList.contains(user)) {
-            System.out.println("-------------------------------------------------------------------------");
-            System.out.println("User object already exist");
-            System.out.println("-------------------------------------------------------------------------");
-            return user;
-        }*/
-        user.setId(UUID.randomUUID());
-        userTable.put(user.getId(), user);
+        userService.saveOrUpdate(user);
         return user;
-//        return "Inside create user method!";
     }
 
     @PutMapping
-    public String updateUser(@RequestBody User user) {
-        if(userTable.containsKey(user.getId())) {
-            userTable.put(user.getId(), user);
-            return "User updated successfully!";
-        }
-        /*if(userList.remove(user)) {
-            userList.add(user);
-            return "User updated successfully!";
-        }*/
-        return "User not found!";
+    public User updateUser(@RequestBody User user) {
+        userService.updateUser(user);
+        return user;
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathParam("id") UUID userId) {
-        if(userTable.containsKey(userId))
-            if(userTable.remove(userId, userTable.get(userId))) {
-                return "Successfully deleted!";
-            } else {
-                return "Failed to delete User!";
-            }
+    public String deleteUser(@PathVariable("id") UUID userId) {
+        if(userService.getUserById(userId).isPresent()) {
+            userService.delete(userId);
+            return "Successfully deleted!";
+        }
         return "User not found!";
     }
 }

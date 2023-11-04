@@ -1,17 +1,19 @@
 package com.grievanceredressalsystem.adminmanagementservice.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.util.Objects;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.UUID;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
+@Entity
+@Table
 @Data
 public class User {
     /*@Override
@@ -27,9 +29,16 @@ public class User {
         return Objects.hash(getEmail(), getPhoneNumber());
     }*/
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column
     private UUID id;
+    @Column
     private String name;
+    @Column
     private String email;
+    @Column
     private String phoneNumber;
+    @Column
     private String address;
 }
