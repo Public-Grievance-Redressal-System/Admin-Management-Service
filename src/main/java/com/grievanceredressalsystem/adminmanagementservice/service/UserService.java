@@ -2,9 +2,13 @@ package com.grievanceredressalsystem.adminmanagementservice.service;
 
 import com.grievanceredressalsystem.adminmanagementservice.model.User;
 import com.grievanceredressalsystem.adminmanagementservice.repository.UserRepository;
+import com.grievanceredressalsystem.adminmanagementservice.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +30,8 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void saveOrUpdate(User user) {
+    public void save(User user) {
+        user.setPassword(Utils.encoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -34,7 +39,16 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void updateUser(User user) {
-        userRepository.save(user);
+    public User saveOrUpdateUser(User user, UUID id) {
+        return userRepository.findById(id)
+                .map(userObj -> {
+                    user.setId(id);
+                    return userRepository.save(user);
+                })
+                .orElseGet(() -> userRepository.save(user));
+    }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

@@ -1,20 +1,14 @@
 package com.grievanceredressalsystem.adminmanagementservice.controller;
 
-import com.grievanceredressalsystem.adminmanagementservice.model.Role;
 import com.grievanceredressalsystem.adminmanagementservice.service.RoleService;
+import com.grievanceredressalsystem.adminmanagementservice.utils.UserRoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/role")
@@ -24,12 +18,11 @@ public class RoleController {
     RoleService roleService;
 
     @GetMapping
-    public List<Role> getRole() {
-
-        return roleService.getAllRoles();
+    public List<UserRoleEnum> getRole() {
+        return Arrays.stream(UserRoleEnum.class.getEnumConstants()).toList();
     }
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public Optional<Role> getRoleById(@PathVariable("id") UUID id) {
 
         return roleService.getRoleById(id);
@@ -54,5 +47,5 @@ public class RoleController {
             return "Successfully deleted!";
         }
         return "Role not found!";
-    }
+    }*/
 }

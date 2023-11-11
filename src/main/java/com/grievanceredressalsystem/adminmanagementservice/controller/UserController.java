@@ -2,7 +2,9 @@ package com.grievanceredressalsystem.adminmanagementservice.controller;
 
 import com.grievanceredressalsystem.adminmanagementservice.model.User;
 import com.grievanceredressalsystem.adminmanagementservice.service.UserService;
+import com.grievanceredressalsystem.adminmanagementservice.utils.UserRoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,14 +38,15 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        userService.saveOrUpdate(user);
+        if(user.getUserRole() != UserRoleEnum.DEPT_ADMIN)
+            user.setDepartmentId(null);
+        userService.save(user);
         return user;
     }
 
-    @PutMapping
-    public User updateUser(@RequestBody User user) {
-        userService.updateUser(user);
-        return user;
+    @PutMapping("/{id}")
+    public User updateUser(@RequestBody User user, @PathVariable("id") UUID id) {
+        return userService.saveOrUpdateUser(user, id);
     }
 
     @DeleteMapping("/{id}")

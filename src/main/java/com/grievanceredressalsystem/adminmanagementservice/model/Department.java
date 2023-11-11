@@ -22,6 +22,6 @@ public class Department {
     private String name;
     @Column
     private String description;
-    @Column
-    private UUID admin;
+    /*@Column
+    private UUID admin;*/
 }

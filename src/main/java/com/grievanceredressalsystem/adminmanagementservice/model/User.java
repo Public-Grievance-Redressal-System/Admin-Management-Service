@@ -1,6 +1,7 @@
 package com.grievanceredressalsystem.adminmanagementservice.model;
 
 
+import com.grievanceredressalsystem.adminmanagementservice.utils.UserRoleEnum;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import lombok.Data;
@@ -38,7 +39,14 @@ public class User {
     @Column
     private String email;
     @Column
+    private String password;
+    @Column
     private String phoneNumber;
     @Column
     private String address;
+    @Column
+    private UserRoleEnum userRole;
+    @Column
+    private UUID departmentId;
+
 }

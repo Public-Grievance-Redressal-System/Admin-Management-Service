@@ -14,7 +14,7 @@ public class SecurityWithCsrfCookieConfig {
         http.csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/user/**", "/department/**", "/role/**")
+                .requestMatchers("/user/**", "/admin/department/**", "/role/**", "/**")
                 .permitAll();
         return http.build();
         /*http.csrf((csrf) -> csrf
