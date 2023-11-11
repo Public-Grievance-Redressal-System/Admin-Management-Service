@@ -2,6 +2,8 @@ package com.grievanceredressalsystem.adminmanagementservice.model;
 
 
 import com.grievanceredressalsystem.adminmanagementservice.utils.UserRoleEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import lombok.Data;
@@ -45,7 +47,8 @@ public class User {
     @Column
     private String address;
     @Column
-    private UserRoleEnum userRole;
+    @Enumerated(EnumType.STRING)
+    private UserRoleEnum userRole = UserRoleEnum.USER;
     @Column
     private UUID departmentId;
 

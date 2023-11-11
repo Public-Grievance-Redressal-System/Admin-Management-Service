@@ -36,6 +36,14 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping("/{id}/role")
+    public User getUserRoleById(@PathVariable("id") UUID id) {
+
+        if(userService.getUserById(id).isPresent())
+            return userService.getUserById(id).get();
+        return null;
+    }
+
     @PostMapping
     public User createUser(@RequestBody User user) {
         if(user.getUserRole() != UserRoleEnum.DEPT_ADMIN)
