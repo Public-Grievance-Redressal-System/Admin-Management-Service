@@ -49,12 +49,15 @@ public class UserController {
         if(user.getUserRole() != UserRoleEnum.DEPT_ADMIN)
             user.setDepartmentId(null);
         userService.save(user);
+        user.setPassword(null);
         return user;
     }
 
     @PutMapping("/{id}")
     public User updateUser(@RequestBody User user, @PathVariable("id") UUID id) {
-        return userService.saveOrUpdateUser(user, id);
+        var userObj = userService.saveOrUpdateUser(user, id);
+        userObj.setPassword(null);
+        return userObj;
     }
 
     @DeleteMapping("/{id}")

@@ -22,12 +22,20 @@ public class UserService {
 
     public List<User> getAllUsers() {
         var users = new ArrayList<User>();
-        userRepository.findAll().forEach(users::add);
+        userRepository.findAll().forEach(user -> {
+            user.setPassword(null);
+            users.add(user);
+        });
         return users;
     }
 
     public Optional<User> getUserById(UUID id) {
-        return userRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()) {
+            user.get().setPassword(null);
+            return user;
+        }
+        return Optional.empty();
     }
 
     public void save(User user) {

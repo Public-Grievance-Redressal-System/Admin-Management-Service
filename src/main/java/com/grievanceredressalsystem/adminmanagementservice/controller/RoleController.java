@@ -1,6 +1,5 @@
 package com.grievanceredressalsystem.adminmanagementservice.controller;
 
-import com.grievanceredressalsystem.adminmanagementservice.service.RoleService;
 import com.grievanceredressalsystem.adminmanagementservice.utils.UserRoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/role")
 public class RoleController {
-
-    @Autowired
-    RoleService roleService;
 
     @GetMapping
     public List<UserRoleEnum> getRole() {

@@ -1,6 +1,8 @@
 package com.grievanceredressalsystem.adminmanagementservice.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.grievanceredressalsystem.adminmanagementservice.utils.UserRoleEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,6 +20,7 @@ import java.util.UUID;
 @Entity
 @Table
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
     /*@Override
     public boolean equals(Object o) {
